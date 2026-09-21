@@ -1,29 +1,29 @@
 # SpoolDeck
 
-**Tablet filament tracker for the Bambu Lab A1 external spool holder.**
+**Universal filament tracker for the Bambu Lab A1 external spool holder.**
 
-SpoolDeck runs as a local web app on your laptop and is designed to be used from a tablet mounted near your printer. It automatically tracks filament usage by listening to your A1's live telemetry over MQTT — no AMS required.
+SpoolDeck is a local-first web app that tracks your filament usage without needing an AMS. It runs as a lightweight background server on any machine on your network (Windows PC, Mac, Linux, Raspberry Pi, or NAS) and can be accessed from any phone, tablet, or browser. It automatically tracks usage by listening to your A1's live telemetry over MQTT.
 
 ## Features
 
 - 🎯 **Auto-deduct** — When a print finishes, SpoolDeck automatically subtracts the slicer-estimated grams from the loaded spool.
 - ⚖️ **Optional scale precision** — Weigh a finished part or the whole spool on a kitchen scale to override slicer estimates.
 - 📊 **Full audit ledger** — Every gram in, every gram out, tracked with timestamps.
-- 🖨️ **Live telemetry** — Nozzle/bed temps, layer count, speed mode, and progress bar streamed from the A1.
-- 📱 **Installable PWA** — Add to your Android/iPad home screen for a native app experience.
+- 🖨️ **Live telemetry** — Nozzle/bed temps, layer count, speed mode, and progress bar streamed directly from the A1.
+- 📱 **Installable PWA** — Add to your Android/iOS home screen for a native, full-screen app experience (great for a dedicated workshop tablet).
 - 🔒 **100% local** — Your data stays on your machine. No cloud accounts required.
 
 ## Requirements
 
-- **Node.js 22+**
+- **Node.js 22+** installed on your host machine (the server)
 - **Bambu Lab A1** (with external spool holder)
-- A tablet or phone on the same Wi-Fi network
+- Any device with a web browser to access the dashboard
 - *(Optional)* A kitchen scale for precision weighing
 
 ## Quick Start
 
 ```bash
-# 1. Clone the repo
+# 1. Clone the repo to your server machine
 git clone https://github.com/YOUR_USERNAME/spooldeck.git
 cd spooldeck
 
@@ -34,11 +34,11 @@ npm install
 cp .env.example .env
 # Edit .env with your printer's IP, serial number, and access code
 
-# 4. Start the dev server
+# 4. Start the server
 npm run dev
 ```
 
-Open `http://YOUR_LAPTOP_IP:8080` on your tablet.
+Open `http://YOUR_SERVER_IP:8080` on your phone, tablet, or PC.
 
 ## Connecting to Your Printer
 
@@ -79,17 +79,28 @@ node generate-certs.mjs 192.168.1.100
 
 This creates `rootCA.crt`, `server.crt`, and `server.key`. Install `rootCA.crt` as a trusted certificate on your tablet, then access SpoolDeck via `https://YOUR_IP:8080`.
 
-## Running on Windows Startup
+## Running as a Background Server
 
-To run SpoolDeck silently in the background when your laptop boots:
+For the best experience, SpoolDeck should run continuously in the background so it can always catch finishing prints. 
 
+### On Windows
+
+To run SpoolDeck silently in the background when your PC boots:
 1. Create a `.vbs` file in your Windows Startup folder (`Win+R` → `shell:startup`):
 ```vbs
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run "cmd /c ""C:\path\to\spooldeck\Start-SpoolDeck.bat""", 0, False
 ```
+2. Use the included `Stop-SpoolDeck.bat` to gracefully shut down the server when needed.
 
-2. Use `Stop-SpoolDeck.bat` to gracefully shut down the server.
+### On Linux, macOS, or Raspberry Pi
+
+Use a process manager like `pm2` or a `systemd` service:
+```bash
+npm install -g pm2
+pm2 start "npm run dev" --name spooldeck
+pm2 save
+```
 
 ## Architecture
 
