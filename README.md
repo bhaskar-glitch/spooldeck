@@ -6,12 +6,14 @@ SpoolDeck is a local-first web app that tracks your filament usage without needi
 
 ## Features
 
-- 🎯 **Auto-deduct** — When a print finishes, SpoolDeck automatically subtracts the slicer-estimated grams from the loaded spool.
-- ⚖️ **Optional scale precision** — Weigh a finished part or the whole spool on a kitchen scale to override slicer estimates.
-- 📊 **Full audit ledger** — Every gram in, every gram out, tracked with timestamps.
-- 🖨️ **Live telemetry** — Nozzle/bed temps, layer count, speed mode, and progress bar streamed directly from the A1.
-- 📱 **Installable PWA** — Add to your Android/iOS home screen for a native, full-screen app experience (great for a dedicated workshop tablet).
-- 🔒 **100% local** — Your data stays on your machine. No cloud accounts required.
+- 🎯 **Smart Auto-Deduct** — Automatically subtracts slicer-estimated grams from the loaded spool when a print finishes. If a print fails halfway, it calculates the partial extrusion and deducts only that amount.
+- 📡 **Auto-Healing IP Discovery** — If your router changes your printer's IP address, SpoolDeck automatically sweeps your local network (port 8883), finds the new IP, and reconnects seamlessly.
+- 🛡️ **Indestructible JSON Backups** — Every inventory change is instantly backed up to a local JSON file. If a sudden power outage ever corrupts the primary database, the server automatically resurrects your spools on the next boot.
+- ⚡ **Ultra-Fast Local Telemetry** — Uses local MQTT to stream nozzle/bed temperatures, layer counts, and progress data instantly, without relying on Bambu Cloud servers or internet access.
+- 📱 **True Native Fullscreen PWA** — Generates its own local HTTPS certificates so it can be installed on Android/iOS tablets as a true native app, completely hiding the browser UI for a distraction-free workshop screen.
+- ⚖️ **Optional Scale Precision** — Weigh a finished part or the whole spool on a kitchen scale to override slicer estimates.
+- 📦 **Bulk CSV Import** — Quickly migrate your existing filament library into SpoolDeck by pasting a comma-separated list of your spools.
+- 📊 **Full Audit Ledger** — Every gram in, every gram out, tracked immutably with timestamps.
 
 ## Requirements
 
