@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment (secrets)
+.env
+.env.*
+
+# TLS certificates (user-generated)
+*.key
+*.crt
+*.pem
+rootCA.*
+
+# Local database
+.pglite/
+
+# Backup data
+spools_backup.json
+
+# Logs
+*.log
+
+# Grok platform internals
+.grok/
+.github_repo
+.node_modules.lock
+artifacts/
+screenshots/
+startup.sh
+
+# OS files
+Thumbs.db
+.DS_Store
