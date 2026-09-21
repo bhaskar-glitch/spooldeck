@@ -1,8 +1,8 @@
 # SpoolDeck
 
-**Universal filament tracker for the Bambu Lab A1 external spool holder.**
+**Universal filament tracker for Bambu Lab printers (A1, A1 Mini, P1 & X1 series).**
 
-SpoolDeck is a local-first web app that tracks your filament usage without needing an AMS. It runs as a lightweight background server on any machine on your network (Windows PC, Mac, Linux, Raspberry Pi, or NAS) and can be accessed from any phone, tablet, or browser. It automatically tracks usage by listening to your A1's live telemetry over MQTT.
+SpoolDeck is a local-first web app that tracks your filament usage without needing an AMS. It runs as a lightweight background server on any machine on your network (Windows PC, Mac, Linux, Raspberry Pi, or NAS) and can be accessed from any phone, tablet, or browser. It automatically tracks usage by listening to your printer's live telemetry over MQTT.
 
 ## Features
 
@@ -18,7 +18,7 @@ SpoolDeck is a local-first web app that tracks your filament usage without needi
 ## Requirements
 
 - **Node.js 22+** installed on your host machine (the server)
-- **Bambu Lab A1** (with external spool holder)
+- **Any Bambu Lab Printer** (A1, A1 Mini, P1P, P1S, or X1C)
 - Any device with a web browser to access the dashboard
 - *(Optional)* A kitchen scale for precision weighing
 
@@ -47,7 +47,7 @@ Open `http://YOUR_SERVER_IP:8080` on your phone, tablet, or PC.
 SpoolDeck supports three connection modes:
 
 ### LAN Mode (Recommended)
-Direct MQTT connection to your A1 over your local network. Fastest telemetry updates.
+Direct MQTT connection to your printer over your local network. Fastest telemetry updates.
 
 You need three values from **Bambu Studio → Device → Settings**:
 - **IP Address** — Your printer's local IP (e.g. `192.168.1.50`)
@@ -109,7 +109,7 @@ pm2 save
 - **Frontend**: React 19 + TanStack Start/Router + Tailwind CSS v4
 - **Backend**: Vite dev server with server functions (TanStack Start)
 - **Database**: PGLite (embedded Postgres via WASM) — zero config, data stored in `.pglite/`
-- **Printer Communication**: MQTT over TLS (port 8883) to the A1's LAN interface
+- **Printer Communication**: MQTT over TLS (port 8883) to the printer's LAN interface
 - **Cloud Fallback**: Bambu Cloud REST API for print weight data
 
 ## Project Structure

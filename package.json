@@ -1,7 +1,7 @@
 {
   "name": "spooldeck",
   "version": "1.0.0",
-  "description": "Tablet filament tracker for Bambu Lab A1 — auto-deduct slicer grams, optional kitchen scale for precision.",
+  "description": "Tablet filament tracker for Bambu Lab printers (A1, P1, X1) — auto-deduct slicer grams, optional kitchen scale for precision.",
   "author": "SpoolDeck Contributors",
   "license": "MIT",
   "keywords": ["bambu-lab", "filament-tracker", "3d-printing", "spool-management", "mqtt"],
