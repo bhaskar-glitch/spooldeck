@@ -1034,3 +1034,49 @@ export const demoSendPrint = createServerFn({ method: "POST" })
     ];
     return { dashboard: await buildDashboard(sql), events };
   });
+
+// --- Background Sync Worker ---
+// This ensures the backend connects to the printer and processes print finishes
+// even if the user never opens the web UI on their tablet.
+let backgroundSyncTimer: NodeJS.Timeout | null = null;
+
+function startBackgroundSync() {
+  if (backgroundSyncTimer) return;
+  if (!STATIC_LAN_CREDS.host && !STATIC_LAN_CREDS.serial) return;
+  
+  const tick = () => {
+    ensureLanMqtt(STATIC_LAN_CREDS, (print) => {
+      getSql()
+        .then(async (s) => {
+          const prev = await readPrinterLive(s);
+          const newSnap = snapshotFromMqtt(prev, print);
+          
+          if (!newSnap.trayType) {
+            // Needed to build accurate history logs if printer snapshot misses it
+            const loadedRows = await s<SpoolRow>`select * from spools where location = 'loaded' limit 1`;
+            newSnap.trayType = loadedRows[0]?.material ?? "";
+            newSnap.trayColor = loadedRows[0]?.color_hex ?? "";
+          }
+
+          const evs = await ingestSnapshot(s, newSnap, []);
+          await writePrinterLive(s, newSnap);
+          
+          if (evs.length > 0) {
+            pushLanEvents(evs);
+            await backupSpools(s); // Backup immediately after any deduction
+          }
+        })
+        .catch((e) => console.error("Background sync error:", e));
+    });
+  };
+
+  // Run immediately, then every 10 seconds
+  tick();
+  backgroundSyncTimer = setInterval(tick, 10000);
+}
+
+// Start immediately on server load if in Node environment
+if (typeof window === "undefined") {
+  startBackgroundSync();
+}
+
